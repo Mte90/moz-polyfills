@@ -51,10 +51,13 @@ window['MozActivity'] = function(config) {
 	} else if (config.name === 'record') {
 		navigator.getMedia = (navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia);
 
+		var _body = document.getElementsByTagName('body')[0];
 		var video = document.createElement("video");
-		//video.style.visibility = 'hidden';
+		video.style.visibility = 'hidden';
 		var canvas = document.createElement("canvas");
-		//canvas.style.visibility = 'hidden';
+		canvas.style.visibility = 'hidden';
+		_body.appendChild(video);
+		_body.appendChild(canvas);
 
 		navigator.getMedia({video: true, audio: false},
 		function(stream) {
@@ -67,29 +70,30 @@ window['MozActivity'] = function(config) {
 			video.play();
 		},
 				function(err) {
-					console.log("An error occured! " + err);
+					if (this.error) {
+						this.error();
+					}
 				}
 		);
 		video.addEventListener('canplay', function(ev) {
 			height = video.videoHeight / (video.videoWidth / 500);
 			video.setAttribute('width', 500);
-			video.setAttribute('height', 0);
+			video.setAttribute('height', height);
 			canvas.setAttribute('width', 500);
-			canvas.setAttribute('height', 0);
-		}, false);
+			canvas.setAttribute('height', height);
+			canvas.getContext('2d').drawImage(video, 0, 0, 500, height);
 
-		canvas.width = 500;
-		canvas.height = 0;
-		canvas.getContext('2d').drawImage(video, 0, 0, 500, 0);
+			this.result = {
+				blob: canvas.toDataURL()
+			};
 
-		this.result = {
-			blob: canvas.toDataURL('image/png')
-		};
+			if (this.onsuccess) {
+				this.onsuccess();
+				_body.removeChild(video);
+				_body.removeChild(canvas);
+			}
 
-		if (this.onsuccess) {
-			this.onsuccess();
-		}
-
+		}.bind(this), false);
 	}
 };
 window['MozActivity'].prototype = {
