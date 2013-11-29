@@ -27,12 +27,15 @@ window['MozActivity'] = function(config) {
 			if (files.length === 0) {
 				return;
 			}
-			
+
+			if(typeof config.data !== 'undefined') {
 			//check mimetype
-			 if(files[0].type !== '' && config.data.type.indexOf(files[0].type) < 0){
-				return;
-			 }
-			 
+			if (typeof config.data.type !== 'undefined') {
+				if (files[0].type !== '' && config.data.type.indexOf(files[0].type) < 0) {
+					return;
+				}
+			}
+		}
 
 			this.result = {
 				blob: files[0]
