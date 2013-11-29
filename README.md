@@ -1,15 +1,14 @@
-moz-polyfills
-=============
-
+Demo: http://mte90.github.io/moz-polyfills/
 #Browser supported
 
 Browser used for the develop of the polyfill are Chromium 31 and Firefox 27
 
 #Polyfyll supported
 
-The plain for this polyfill is support the [https://github.com/robnyman/Firefox-OS-Boilerplate-App](FirefoxOS BoilerPlate App) (to start)
+The plain for this polyfill is support the (https://github.com/robnyman/Firefox-OS-Boilerplate-App)[FirefoxOS BoilerPlate App] (to start)
 
-* Pick image
+* Pick image (support for multiple image missing)
+* Record (in developing)
 
 #Credits
 
