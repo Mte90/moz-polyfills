@@ -93,19 +93,49 @@ window['MozActivity'] = function(config) {
 		}.bind(this), false);
 	} else if (config.name === 'dial') {
 		//fake dialing
-			alert('Dialing with ' + config.data.number);
-			this.onsuccess();
+		alert('Dialing with ' + config.data.number);
+		this.onsuccess();
 	} else if (config.name === 'new') {
-		if(config.data.type == 'websms/sms') {
+		if (config.data.type == 'websms/sms') {
 			//fake sms
-			alert('New sms to '+ config.data.number);
-		} else if(config.data.type == 'webcontacts/contact') {
+			alert('New sms to ' + config.data.number);
+		} else if (config.data.type == 'webcontacts/contact') {
 			//fake sms
 			contact = 'Contact: ' + config.data.params.givenName + ' ' + config.data.params.lastName;
-			contact += '\nNumber: ' + config.data.params.tel + '\nEmail:' + config.data.params.email;
-			contact += '\nAddress: ' + config.data.params.address + '\nCompany:' + config.data.params.company;
-			contact += '\nnote: ' + config.data.params.note;
+			contact += '\nNumber: ' + config.data.params.tel + '\nEmail: ' + config.data.params.email;
+			contact += '\nAddress: ' + config.data.params.address + '\nCompany: ' + config.data.params.company;
+			contact += '\nNote: ' + config.data.params.note;
 			alert(contact);
+		} else if (config.data.type == 'mail') {
+			//share url
+			alert('Write email to: ' + config.data.url);
+		}
+		if (this.onsuccess) {
+			this.onsuccess();
+		}
+	} else if (config.name === 'share') {
+		if (config.data.type == '') {
+			//share url
+			alert('Share url: ' + config.data.url);
+		} else {
+			//Share file
+			alert('File shared');
+		}
+		if (this.onsuccess) {
+			this.onsuccess();
+		}
+	} else if (config.name === 'view') {
+		if (config.data.type == 'url') {
+			//share url
+			alert('Open url to browser: ' + config.data.url);
+		}
+		if (this.onsuccess) {
+			this.onsuccess();
+		}
+	} else if (config.name === 'save-bookmark') {
+		if (config.data.type == 'url') {
+			//share url
+			alert('Save url ' + config.data.url + ' with name ' + config.data.name);
 		}
 		if (this.onsuccess) {
 			this.onsuccess();
