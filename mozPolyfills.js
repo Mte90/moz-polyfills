@@ -50,9 +50,9 @@ window['MozActivity'] = function(config) {
 		input.click();
 	} else if (config.name === 'record') {
 		navigator.getMedia = (navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia);
-
 		var _body = document.getElementsByTagName('body')[0];
 		var video = document.createElement("video");
+		video.setAttribute('autoplay', true);
 //		 video.style.visibility = 'hidden';
 		var canvas = document.createElement("canvas");
 //		 canvas.style.visibility = 'hidden';
@@ -62,10 +62,9 @@ window['MozActivity'] = function(config) {
 		navigator.getMedia({video: true, audio: false},
 		function(stream) {
 			if (navigator.mozGetUserMedia) {
-				video.mozSrcObject = stream;
+				video.src = window.URL.createObjectURL(stream);
 			} else {
-				var vendorURL = window.URL || window.webkitURL;
-				video.src = vendorURL.createObjectURL(stream);
+				video.src = window.webkitURL.createObjectURL(stream);
 			}
 			video.play();
 		},
@@ -74,23 +73,39 @@ window['MozActivity'] = function(config) {
 						this.error();
 					}
 				}
-		);
-		video.addEventListener('canplay', function(ev) {
-			canvas.width = video.clientWidth;
-			canvas.height = video.clientHeight;
-			canvas.getContext('2d').drawImage(video, 0, 0, video.videoWidth, video.videoHeight);
+		, false);
 
-			this.result = {
-				blob: canvas.toDataURL('image/png')
-			};
+		video.addEventListener('playing', function(ev) {
 
-			if (this.onsuccess) {
-				this.onsuccess();
-//				_body.removeChild(video);
-//				_body.removeChild(canvas);
+			if (_photo()) {
+				this.result = {
+					blob: canvas.toDataURL('image/png')
+				};
+
+				if (this.onsuccess) {
+					this.onsuccess();
+					//	_body.removeChild(video);
+					//	_body.removeChild(canvas);
+				}
 			}
 
 		}.bind(this), false);
+
+		function _photo() {
+			try {
+				canvas.width = video.clientWidth;
+				canvas.height = video.clientHeight;
+				canvas.getContext('2d').drawImage(video, 0, 0, video.videoWidth, video.videoHeight);
+			} catch (e) {
+				if (e.name === "NS_ERROR_NOT_AVAILABLE") {
+					setTimeout(_photo, 400);
+				} else {
+					throw e;
+				}
+			}
+			return true;
+		}
+
 	} else if (config.name === 'dial') {
 		//fake dialing
 		alert('Dialing with ' + config.data.number);
