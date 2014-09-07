@@ -1,7 +1,7 @@
 Demo: http://mte90.github.io/moz-polyfills/
 #Browser supported
 
-Browser used for the develop of the polyfill are Chromium 31 and Firefox 27
+Browser used for the develop of the polyfill are Chromium 31 and Firefox 32
 
 #Polyfyll supported
 
@@ -15,11 +15,20 @@ The plain for this polyfill is support the [FirefoxOS BoilerPlate App](https://g
 * Open Url (open an alert)
 * Write email (open an alert)
 * Save Bookmark (open an alert)
-* Record (in developing)
+* Record (on Firefox there is a bug that require a 2nd execution)
 
 #Roadmap
 
 * Add flag for write in console and not open alert
+* Alarm support
+* Orientation info
+* Proximity support
+* Ambient Light support
+* Vibration support
+* Hold rotation support
+* Change email polyfill for open the email options of the browser
+* Share photo open a small popup customizable with custom code
+* Mark all the button with Polyfill
 
 #Credits
 

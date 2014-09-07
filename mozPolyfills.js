@@ -98,6 +98,7 @@ window['MozActivity'] = function(config) {
         canvas.getContext('2d').drawImage(video, 0, 0, video.videoWidth, video.videoHeight);
       } catch (e) {
         if (e.name === "NS_ERROR_NOT_AVAILABLE") {
+          alert('On Firefox this feature require a second execution');
           setTimeout(_photo, 400);
         } else {
           throw e;
