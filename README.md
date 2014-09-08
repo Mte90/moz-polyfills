@@ -13,8 +13,8 @@ The plain for this polyfill is support the [FirefoxOS BoilerPlate App](https://g
 * Share Url/File (open an alert)
 * Show Url (open an alert)
 * Open Url (open an alert)
-* Write email (open an alert)
-* Save Bookmark (open an alert)
+* Write email (open the email software)
+* Save Bookmark (save the bookmark)
 * Record (on Firefox there is a bug that require a 2nd execution)
 
 #Roadmap

@@ -136,14 +136,14 @@ window['MozActivity'] = function(config) {
     } //Compose email
     else if (config.data.type === 'mail') {
       window.location.href = "mailto:" + config.data.url;
-      alert('Write email to: ' + config.data.url);
     }
     if (this.onsuccess) {
       this.onsuccess();
     }
-  } else if (config.name === 'share') {
+  } //Share website
+  else if (config.name === 'share') {
+    //Shared an URL
     if (config.data.type === '') {
-      //share url
       alert('Share url: ' + config.data.url);
     } else {
       //Share file
@@ -152,18 +152,27 @@ window['MozActivity'] = function(config) {
     if (this.onsuccess) {
       this.onsuccess();
     }
-  } else if (config.name === 'view') {
+  }
+  else if (config.name === 'view') {
+    //Open a page
     if (config.data.type === 'url') {
-      //share url
-      alert('Open url to browser: ' + config.data.url);
+      window.location.href = "mailto:" + config.data.url;
+      var _win = window.open(config.data.url, '_blank');
+      _win.focus();
     }
     if (this.onsuccess) {
       this.onsuccess();
     }
-  } else if (config.name === 'save-bookmark') {
+  } //Save the bookmark
+  else if (config.name === 'save-bookmark') {
     if (config.data.type === 'url') {
-      //share url
-      alert('Save url ' + config.data.url + ' with name ' + config.data.name);
+      if (window.sidebar && window.sidebar.addPanel) { // Mozilla Firefox Bookmark
+        window.sidebar.addPanel(config.data.name, config.data.url, '');
+      } else if (window.external && ('AddFavorite' in window.external)) { // IE Favorite
+        window.external.AddFavorite(config.data.url, config.data.name);
+      } else { // webkit - safari/chrome
+        alert('Press ' + (navigator.userAgent.toLowerCase().indexOf('mac') !== -1 ? 'Command/Cmd' : 'CTRL') + ' + D to bookmark this page.');
+      }
     }
     if (this.onsuccess) {
       this.onsuccess();
@@ -174,6 +183,7 @@ window['MozActivity'].prototype = {
   constructor: window['MozActivity']
 };
 
+//Convert data in a blob
 //Source http://stackoverflow.com/a/11954337/1902215
 function dataURItoBlob(dataURI, callback) {
   var binary = atob(dataURI.split(',')[1]);
