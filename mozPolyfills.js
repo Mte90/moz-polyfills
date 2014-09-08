@@ -7,6 +7,14 @@ if (!navigator['mozSetMessageHandler']) {
   };
 }
 
+function alertConsole(string) {
+  if (MozPolyfills === 'alert') {
+    alert(string);
+  } else if (MozPolyfills === 'console') {
+    console.log(string);
+  }
+}
+
 /**
  * Load fake WebActivity
  * @constructor
@@ -63,8 +71,8 @@ window['MozActivity'] = function(config) {
     //Create a temporary canvas tag
     var _canvas = document.createElement("canvas");
     _canvas.style.visibility = 'hidden';
-    _body.appendChild(video);
-    _body.appendChild(canvas);
+    _body.appendChild(_video);
+    _body.appendChild(_canvas);
     //getUserMedia wrapper
     navigator.getMedia({video: true, audio: false},
     function(stream) {
@@ -108,7 +116,7 @@ window['MozActivity'] = function(config) {
         _canvas.getContext('2d').drawImage(_video, 0, 0, _video.videoWidth, _video.videoHeight);
       } catch (e) {
         if (e.name === "NS_ERROR_NOT_AVAILABLE") {
-          alert('On Firefox this feature require a second execution');
+          alertConsole('On Firefox this feature require a second execution');
           console.log('Bug #879717 Firefox drawimage on mediastream - https://github.com/Mte90/moz-polyfills/issues/1');
           setTimeout(_photo, 400);
         } else {
@@ -119,13 +127,13 @@ window['MozActivity'] = function(config) {
     }
   } //Dial picker
   else if (config.name === 'dial') {
-    alert('Dialing with ' + config.data.number);
+    alertConsole('Dialing with ' + config.data.number);
     this.onsuccess();
   } //Wrapper for new data
   else if (config.name === 'new') {
     //Fake SMS
     if (config.data.type === 'websms/sms') {
-      alert('New sms to ' + config.data.number);
+      alertConsole('New sms to ' + config.data.number);
     } //Fake Contact
     else if (config.data.type === 'webcontacts/contact') {
       contact = 'Contact: ' + config.data.params.givenName + ' ' + config.data.params.lastName;
@@ -144,10 +152,10 @@ window['MozActivity'] = function(config) {
   else if (config.name === 'share') {
     //Shared an URL
     if (config.data.type === '') {
-      alert('Share url: ' + config.data.url);
+      alertConsole('Share url: ' + config.data.url);
     } else {
       //Share file
-      alert('File shared');
+      alertConsole('File shared');
     }
     if (this.onsuccess) {
       this.onsuccess();
@@ -171,7 +179,7 @@ window['MozActivity'] = function(config) {
       } else if (window.external && ('AddFavorite' in window.external)) { // IE Favorite
         window.external.AddFavorite(config.data.url, config.data.name);
       } else { // webkit - safari/chrome
-        alert('Press ' + (navigator.userAgent.toLowerCase().indexOf('mac') !== -1 ? 'Command/Cmd' : 'CTRL') + ' + D to bookmark this page.');
+        alertConsole('Press ' + (navigator.userAgent.toLowerCase().indexOf('mac') !== -1 ? 'Command/Cmd' : 'CTRL') + ' + D to bookmark this page.');
       }
     }
     if (this.onsuccess) {

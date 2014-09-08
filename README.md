@@ -17,16 +17,20 @@ The plain for this polyfill is support the [FirefoxOS BoilerPlate App](https://g
 * Save Bookmark (save the bookmark)
 * Record (on Firefox there is a bug that require a 2nd execution)
 
+#Console or Alert?
+
+    var MozPolyfills = 'alert';
+or
+    var MozPolyfills = 'console';
+
 #Roadmap
 
-* Add flag for write in console and not open alert
 * Alarm support
 * Orientation info
 * Proximity support
 * Ambient Light support
 * Vibration support
 * Hold rotation support
-* Change email polyfill for open the email options of the browser
 * Share photo open a small popup customizable with custom code
 * Mark all the button with Polyfill
 
