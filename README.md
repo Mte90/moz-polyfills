@@ -10,12 +10,14 @@ The plain for this polyfill is support the [FirefoxOS BoilerPlate App](https://g
 * Pick image (support for multiple image missing)
 * Dial (open an alert)
 * New Contact (open an alert)
-* Share Url/File (open an alert)
+* Share Url (open an alert)
+* Share file (open a blob in a new page)
 * Show Url (open an alert)
 * Open Url (open an alert)
 * Write email (open the email software)
 * Save Bookmark (save the bookmark)
 * Record (on Firefox there is a bug that require a 2nd execution)
+* Open file (open the file in a new page)
 
 #Console or Alert?
 

@@ -143,7 +143,8 @@ window['MozActivity'] = function(config) {
       alert(contact);
     } //Compose email
     else if (config.data.type === 'mail') {
-      window.location.href = "mailto:" + config.data.url;
+      var _win = window.open("mailto:" + config.data.url, '_blank');
+      _win.focus();
     }
     if (this.onsuccess) {
       this.onsuccess();
@@ -154,8 +155,9 @@ window['MozActivity'] = function(config) {
     if (config.data.type === '') {
       alertConsole('Share url: ' + config.data.url);
     } else {
-      //Share file
-      alertConsole('File shared');
+      //Share blob in a new page
+      var _win = window.open(window.URL.createObjectURL(config.data.blobs[0]), '_blank');
+      _win.focus();
     }
     if (this.onsuccess) {
       this.onsuccess();
@@ -164,7 +166,6 @@ window['MozActivity'] = function(config) {
   else if (config.name === 'view') {
     //Open a page
     if (config.data.type === 'url') {
-      window.location.href = "mailto:" + config.data.url;
       var _win = window.open(config.data.url, '_blank');
       _win.focus();
     }
@@ -182,6 +183,14 @@ window['MozActivity'] = function(config) {
         alertConsole('Press ' + (navigator.userAgent.toLowerCase().indexOf('mac') !== -1 ? 'Command/Cmd' : 'CTRL') + ' + D to bookmark this page.');
       }
     }
+    if (this.onsuccess) {
+      this.onsuccess();
+    }
+  } //Open file in a new page
+  else if (config.name === 'open') {
+    var _win = window.open(config.data.url, '_blank');
+    _win.focus();
+    
     if (this.onsuccess) {
       this.onsuccess();
     }
