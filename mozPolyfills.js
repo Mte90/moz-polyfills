@@ -14,22 +14,25 @@ if (!navigator['mozSetMessageHandler']) {
  */
 
 window['MozActivity'] = function(config) {
-  //pick image
+  //Pick image
   if (config.name === 'pick') {
+    //Create input element
     input = document.createElement('input');
+    //Set type file for the input
     input.type = 'file';
+    //Pass the mime type to the input element
     if (config.data && config.data.type) {
       input.accept = config.data.type.join();
     }
     input.addEventListener('change', function(e) {
       files = e.target.files; // FileList object
-
+      //Check if empty
       if (files.length === 0) {
         return;
       }
-
+      //Check data if exist
       if (typeof config.data !== 'undefined') {
-        //check mimetype
+        //Check mimetype
         if (typeof config.data.type !== 'undefined') {
           if (files[0].type !== '' && config.data.type.indexOf(files[0].type) < 0) {
             return;
@@ -46,59 +49,67 @@ window['MozActivity'] = function(config) {
       }
 
     }.bind(this), false);
-
+    //Open the file picker
     input.click();
-  } else if (config.name === 'record') {
+  } //Capture a photo
+  else if (config.name === 'record') {
+    //GetUserMedia polyfill
     navigator.getMedia = (navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia);
     var _body = document.getElementsByTagName('body')[0];
-    var video = document.createElement("video");
-    video.setAttribute('autoplay', true);
-    video.style.visibility = 'hidden';
-    var canvas = document.createElement("canvas");
-    canvas.style.visibility = 'hidden';
+    //Create a temporary video tag
+    var _video = document.createElement("video");
+    _video.setAttribute('autoplay', true);
+    _video.style.visibility = 'hidden';
+    //Create a temporary canvas tag
+    var _canvas = document.createElement("canvas");
+    _canvas.style.visibility = 'hidden';
     _body.appendChild(video);
     _body.appendChild(canvas);
-
+    //getUserMedia wrapper
     navigator.getMedia({video: true, audio: false},
     function(stream) {
       if (navigator.mozGetUserMedia) {
-        video.src = window.URL.createObjectURL(stream);
+        _video.src = window.URL.createObjectURL(stream);
       } else {
-        video.src = window.webkitURL.createObjectURL(stream);
+        _video.src = window.webkitURL.createObjectURL(stream);
       }
-      video.play();
+      _video.play();
     },
             function(err) {
+              console.log(err);
               if (this.error) {
                 this.error();
               }
             }
     , false);
-
-    video.addEventListener('playing', function(ev) {
-
+    //Event on video start
+    _video.addEventListener('playing', function(ev) {
+      //Call a wrapper for take a photo
       if (_photo()) {
         this.result = {
-          blob: dataURItoBlob(canvas.toDataURL('image/jpeg', 0.7))
+          //Canvas to Blob in jpg format to 0.7 compression
+          blob: dataURItoBlob(_canvas.toDataURL('image/jpeg', 0.7))
         };
 
         if (this.onsuccess) {
           this.onsuccess();
-          _body.removeChild(video);
-          _body.removeChild(canvas);
+          //Remove the video and canvas element
+          _body.removeChild(_video);
+          _body.removeChild(_canvas);
         }
       }
-
     }.bind(this), false);
-
+    //Wrapper for https://bugzilla.mozilla.org/show_bug.cgi?id=879717
     function _photo() {
       try {
-        canvas.width = video.clientWidth;
-        canvas.height = video.clientHeight;
-        canvas.getContext('2d').drawImage(video, 0, 0, video.videoWidth, video.videoHeight);
+        _canvas.width = _video.clientWidth;
+        _canvas.height = _video.clientHeight;
+        //Draw the video frame in the canvas
+        _canvas.getContext('2d').drawImage(_video, 0, 0, _video.videoWidth, _video.videoHeight);
       } catch (e) {
         if (e.name === "NS_ERROR_NOT_AVAILABLE") {
           alert('On Firefox this feature require a second execution');
+          console.log('Bug #879717 Firefox drawimage on mediastream - https://github.com/Mte90/moz-polyfills/issues/1');
           setTimeout(_photo, 400);
         } else {
           throw e;
@@ -106,24 +117,25 @@ window['MozActivity'] = function(config) {
       }
       return true;
     }
-
-  } else if (config.name === 'dial') {
-    //fake dialing
+  } //Dial picker
+  else if (config.name === 'dial') {
     alert('Dialing with ' + config.data.number);
     this.onsuccess();
-  } else if (config.name === 'new') {
+  } //Wrapper for new data
+  else if (config.name === 'new') {
+    //Fake SMS
     if (config.data.type === 'websms/sms') {
-      //fake sms
       alert('New sms to ' + config.data.number);
-    } else if (config.data.type === 'webcontacts/contact') {
-      //fake sms
+    } //Fake Contact
+    else if (config.data.type === 'webcontacts/contact') {
       contact = 'Contact: ' + config.data.params.givenName + ' ' + config.data.params.lastName;
       contact += '\nNumber: ' + config.data.params.tel + '\nEmail: ' + config.data.params.email;
       contact += '\nAddress: ' + config.data.params.address + '\nCompany: ' + config.data.params.company;
       contact += '\nNote: ' + config.data.params.note;
       alert(contact);
-    } else if (config.data.type === 'mail') {
-      //share url
+    } //Compose email
+    else if (config.data.type === 'mail') {
+      window.location.href = "mailto:" + config.data.url;
       alert('Write email to: ' + config.data.url);
     }
     if (this.onsuccess) {
