@@ -23,6 +23,7 @@ The plain for this polyfill is support the [FirefoxOS BoilerPlate App](https://g
 
     var MozPolyfills = 'alert';
 or
+
     var MozPolyfills = 'console';
 
 #Roadmap
@@ -33,7 +34,11 @@ or
 * Ambient Light support
 * Vibration support
 * Hold rotation support
-* Share photo open a small popup customizable with custom code
+* Check connection API
+* Ambient light
+* Proximity
+* deviceStorage
+* Get all contacs
 * Mark all the button with Polyfill
 
 #Credits
