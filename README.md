@@ -20,6 +20,7 @@ The plain for this polyfill is support the [FirefoxOS BoilerPlate App](https://g
 * Open file (open the file in a new page)
 * Alarm (show message)
 * Vibrate (shake the body :-D)
+* Connection support (UNKNOWN mode)
 
 #Console or Alert?
 
@@ -32,7 +33,6 @@ or
 
 * deviceStorage
 * Get all contacs
-* Mark all the button with Polyfill
 
 #Credits
 

@@ -81,7 +81,6 @@ if (!isMobile() || !navigator.vibrate) {
       clearTimeout(navigator.vibrate.current);
     }
     document.body.className += ' buzz';
-    document.title = '*buzz* ' + document.title;
     navigator.vibrate.current = window.setTimeout(
             navigator.vibrate.stop,
             navigator.vibrate.duration[navigator.vibrate.count]
@@ -92,7 +91,6 @@ if (!isMobile() || !navigator.vibrate) {
       clearTimeout(navigator.vibrate.current);
     }
     document.body.className = document.body.className.replace(' buzz', '');
-    document.title = document.title.replace('*buzz* ', '');
     if (navigator.vibrate.duration[navigator.vibrate.count + 1]) {
       navigator.vibrate.current = window.setTimeout(
               navigator.vibrate.buzz,
@@ -101,6 +99,12 @@ if (!isMobile() || !navigator.vibrate) {
     }
     navigator.vibrate.count += 2;
   };
+}
+//Connection support
+if (!isMobile() || (!navigator.connection || navigator.mozConnection || navigator.webkitConnection)) {
+  navigator.connection = {UNKNOWN: true, type: 0};
+  navigator.mozConnection = {UNKNOWN: true, type: 0};
+  navigator.webkitConnection = {UNKNOWN: true, type: 0};
 }
 
 function alertConsole(string) {
