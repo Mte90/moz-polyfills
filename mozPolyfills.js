@@ -6,6 +6,20 @@ if (!navigator['mozSetMessageHandler']) {
     }
   };
 }
+if (!navigator['mozAlarms']) {
+  navigator['mozAlarms'] = function(activity, callback) {
+      return false;
+  };
+  navigator['mozAlarms'].add = function(callback) {
+      return false;
+  };
+  navigator['mozAlarms'].getAll = function(callback) {
+      return false;
+  };
+  navigator['mozAlarms'].remove = function(callback) {
+      return false;
+  };
+}
 
 function alertConsole(string) {
   if (MozPolyfills === 'alert') {
