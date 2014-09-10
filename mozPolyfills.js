@@ -7,17 +7,21 @@ if (!navigator['mozSetMessageHandler']) {
   };
 }
 if (!navigator['mozAlarms']) {
-  navigator['mozAlarms'] = function(activity, callback) {
-      return false;
+  navigator['mozAlarms'] = function(callback) {
+    alertConsole('Alarm called');
+    return false;
   };
   navigator['mozAlarms'].add = function(callback) {
-      return false;
+    alertConsole('Alarm added');
+    return false;
   };
   navigator['mozAlarms'].getAll = function(callback) {
-      return false;
+    alertConsole('Alarm get all');
+    return false;
   };
   navigator['mozAlarms'].remove = function(callback) {
-      return false;
+    alertConsole('Alarm remove');
+    return false;
   };
 }
 
@@ -204,7 +208,7 @@ window['MozActivity'] = function(config) {
   else if (config.name === 'open') {
     var _win = window.open(config.data.url, '_blank');
     _win.focus();
-    
+
     if (this.onsuccess) {
       this.onsuccess();
     }
