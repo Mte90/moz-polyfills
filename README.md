@@ -19,6 +19,7 @@ The plain for this polyfill is support the [FirefoxOS BoilerPlate App](https://g
 * Record (on Firefox there is a bug that require a 2nd execution)
 * Open file (open the file in a new page)
 * Alarm (show message)
+* Vibrate (shake the body :-D)
 
 #Console or Alert?
 
