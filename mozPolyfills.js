@@ -28,14 +28,14 @@ if (!navigator.mozAlarms) {
 //DeviceStorage support
 if (!navigator.getDeviceStorage) {
   navigator.getDeviceStorage = function(type) {
-    this.filetype = '';
-    if (type === "pictures") {
-      this.filetype = "image/*";
-    }
-    alertConsole('getDeviceStorage ' + type);
-    return false;
+    this.filetype = type;
+    alertConsole('getDeviceStorage ' + this.filetype);
+    return this;
   };
   navigator.getDeviceStorage.enumerate = function() {
+    if (this.filetype === "pictures") {
+      this.filetype = "image/*";
+    }
     //Create input element
     input = document.createElement('input');
     //Set type file for the input
@@ -52,6 +52,7 @@ if (!navigator.getDeviceStorage) {
       }
       return {result: e.target.files};
     }.bind(this), false);
+    return false;
   };
 }
 
@@ -73,27 +74,32 @@ if (!isMobile() || !navigator.vibrate) {
     }
     navigator.vibrate.count = 0;
     navigator.vibrate.duration = duration;
+    navigator.vibrate.buzz();
+  };
+  navigator.vibrate.buzz = function() {
     if (navigator.vibrate.current) {
       clearTimeout(navigator.vibrate.current);
     }
     document.body.className += ' buzz';
+    document.title = '*buzz* ' + document.title;
     navigator.vibrate.current = window.setTimeout(
-            function() {
-              if (navigator.vibrate.current) {
-                clearTimeout(navigator.vibrate.current);
-              }
-              document.body.className = document.body.className.replace(' buzz', '');
-              document.title = document.title.replace('*buzz* ', '');
-              if (navigator.vibrate.duration[navigator.vibrate.count + 1]) {
-                navigator.vibrate.current = window.setTimeout(
-                        navigator.vibrate.buzz,
-                        navigator.vibrate.duration[navigator.vibrate.count + 1]
-                        );
-              }
-              navigator.vibrate.count += 2;
-            },
+            navigator.vibrate.stop,
             navigator.vibrate.duration[navigator.vibrate.count]
             );
+  };
+  navigator.vibrate.stop = function() {
+    if (navigator.vibrate.current) {
+      clearTimeout(navigator.vibrate.current);
+    }
+    document.body.className = document.body.className.replace(' buzz', '');
+    document.title = document.title.replace('*buzz* ', '');
+    if (navigator.vibrate.duration[navigator.vibrate.count + 1]) {
+      navigator.vibrate.current = window.setTimeout(
+              navigator.vibrate.buzz,
+              navigator.vibrate.duration[navigator.vibrate.count + 1]
+              );
+    }
+    navigator.vibrate.count += 2;
   };
 }
 
