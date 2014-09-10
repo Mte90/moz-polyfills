@@ -40,16 +40,18 @@ if (!navigator.getDeviceStorage) {
     input = document.createElement('input');
     //Set type file for the input
     input.type = 'file';
+    //Multiple support
+    input.multiple = 'multiple';
     //Pass the mime type to the input element
     input.accept = this.filetype;
-    input.addEventListener('change', function(e) {
+    //Open the file picker
+    input.click();
+    return input.addEventListener('change', function(e) {
       if (this.onsuccess) {
         this.onsuccess();
       }
       return {result: e.target.files};
     }.bind(this), false);
-    //Open the file picker
-    input.click();
   };
 }
 
