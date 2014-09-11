@@ -107,12 +107,23 @@ if (!isMobile() || (!navigator.connection || navigator.mozConnection || navigato
   navigator.mozConnection = {UNKNOWN: true, type: 0};
   navigator.webkitConnection = {UNKNOWN: true, type: 0};
 }
-//Keep screen on
+//Keep screen support
 if (!navigator.requestWakeLock) {
   navigator.requestWakeLock = function() {
     alertConsole('Wake lock called');
     return false;
   };
+}
+//Lock orientation support
+if (!screen.mozLockOrientation) {
+  if (screen.msLockOrientation) {
+    screen.mozLockOrientation = screen.msLockOrientation;
+  } else {
+    screen.mozLockOrientation = function(mode) {
+      alertConsole('Lock orientation called');
+      return false;
+    };
+  }
 }
 
 function alertConsole(string) {
