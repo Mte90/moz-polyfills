@@ -13,7 +13,7 @@ The plain for this polyfill is support the [FirefoxOS BoilerPlate App](https://g
 * Share Url (show message)
 * Share file (open a blob in a new page)
 * Show Url (show message)
-* Open Url (show message)
+* Open Url (open the page)
 * Write email (open the email software)
 * Save Bookmark (save the bookmark)
 * Record (on Firefox there is a bug that require a 2nd execution)
@@ -21,6 +21,8 @@ The plain for this polyfill is support the [FirefoxOS BoilerPlate App](https://g
 * Alarm (show message)
 * Vibrate (shake the body :-D)
 * Connection support (UNKNOWN mode)
+* Open settings (do nothing)
+* Keep screen on (show message)
 
 #Console or Alert?
 

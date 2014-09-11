@@ -27,33 +27,34 @@ if (!navigator.mozAlarms) {
 }
 //DeviceStorage support
 if (!navigator.getDeviceStorage) {
-  navigator.getDeviceStorage = function(type) {
+  _getDeviceStorage = function(type) {
     this.filetype = type;
-    alertConsole('getDeviceStorage ' + this.filetype);
-    return this;
-  };
-  navigator.getDeviceStorage.enumerate = function() {
     if (this.filetype === "pictures") {
       this.filetype = "image/*";
     }
     //Create input element
-    input = document.createElement('input');
+    this.input = document.createElement('input');
     //Set type file for the input
-    input.type = 'file';
+    this.input.type = 'file';
     //Multiple support
-    input.multiple = 'multiple';
+    this.input.multiple = 'multiple';
     //Pass the mime type to the input element
-    input.accept = this.filetype;
-    //Open the file picker
-    input.click();
-    return input.addEventListener('change', function(e) {
+    this.input.accept = this.filetype;
+    alertConsole('getDeviceStorage ' + this.filetype);
+    this.input.addEventListener('change', function(e) {
       if (this.onsuccess) {
         this.onsuccess();
       }
       return {result: e.target.files};
     }.bind(this), false);
+    //return this;
+  };
+  _getDeviceStorage.prototype.enumerate = function() {
+    //Open the file picker
+    this.input.click();
     return false;
   };
+  navigator.getDeviceStorage = _getDeviceStorage;
 }
 
 //Vibrate polyfill - https://github.com/codepo8/vibrate-polyfill/
@@ -105,6 +106,13 @@ if (!isMobile() || (!navigator.connection || navigator.mozConnection || navigato
   navigator.connection = {UNKNOWN: true, type: 0};
   navigator.mozConnection = {UNKNOWN: true, type: 0};
   navigator.webkitConnection = {UNKNOWN: true, type: 0};
+}
+//Keep screen on
+if (!navigator.requestWakeLock) {
+  navigator.requestWakeLock = function() {
+    alertConsole('Wake lock called');
+    return false;
+  };
 }
 
 function alertConsole(string) {
@@ -251,7 +259,7 @@ window['MozActivity'] = function(config) {
   } //Share website
   else if (config.name === 'share') {
     //Shared an URL
-    if (config.data.type === '') {
+    if (config.data.type === '' || config.data.url !== '') {
       alertConsole('Share url: ' + config.data.url);
     } else {
       //Share blob in a new page
