@@ -25,9 +25,10 @@ if (!navigator.mozAlarms) {
     return false;
   };
 }
-//DeviceStorage support
+//DeviceStorage support - WIP
+
 if (!navigator.getDeviceStorage) {
-  _getDeviceStorage = function(type) {
+  navigator.getDeviceStorage = function(type) {
     this.filetype = type;
     if (this.filetype === "pictures") {
       this.filetype = "image/*";
@@ -42,21 +43,23 @@ if (!navigator.getDeviceStorage) {
     this.input.accept = this.filetype;
     alertConsole('getDeviceStorage ' + this.filetype);
     this.input.addEventListener('change', function(e) {
+      console.log(e.target.files)
       if (this.onsuccess) {
         this.onsuccess();
       }
       return {result: e.target.files};
     }.bind(this), false);
-    //return this;
-  };
-  _getDeviceStorage.prototype.enumerate = function() {
-    //Open the file picker
-    this.input.click();
-    return false;
-  };
-  navigator.getDeviceStorage = _getDeviceStorage;
-}
+        
+    this.enumerate = function() {
+      //Open the file picker
+      this.input.click();
+      return false;
+    };
+    
+    return this;
 
+  };
+}
 //Vibrate polyfill - https://github.com/codepo8/vibrate-polyfill/
 //Author Christian Heilmann
 if (!isMobile() || !navigator.vibrate) {
@@ -107,7 +110,7 @@ if (!isMobile() || (!navigator.connection || navigator.mozConnection || navigato
   navigator.mozConnection = {UNKNOWN: true, type: 0};
   navigator.webkitConnection = {UNKNOWN: true, type: 0};
 }
-//Keep screen support
+//Keep screen support - API only of Gecko
 if (!navigator.requestWakeLock) {
   navigator.requestWakeLock = function() {
     alertConsole('Wake lock called');
@@ -116,6 +119,7 @@ if (!navigator.requestWakeLock) {
 }
 //Lock orientation support
 if (!screen.mozLockOrientation) {
+  //Ie support this API
   if (screen.msLockOrientation) {
     screen.mozLockOrientation = screen.msLockOrientation;
   } else {
@@ -137,7 +141,7 @@ function alertConsole(string) {
 /**
  * Load fake WebActivity
  * @constructor
- * @param {config} the config for the webactivity
+ * @param config config for the webactivity
  */
 window['MozActivity'] = function(config) {
   //Pick image

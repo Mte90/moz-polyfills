@@ -34,7 +34,7 @@ or
 
 #Roadmap
 
-* deviceStorage
+* deviceStorage WIP
 * Get all contacs
 
 #Credits
