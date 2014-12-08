@@ -23,7 +23,7 @@ The plain for this polyfill is support the [FirefoxOS BoilerPlate App](https://g
 * Connection support (UNKNOWN mode)
 * Open settings (do nothing)
 * Keep screen on (show message)
-* Lock orienation (show message)
+* Lock orientation (show message)
 
 #Console or Alert?
 
@@ -35,7 +35,7 @@ or
 #Roadmap
 
 * deviceStorage WIP
-* Get all contacs
+* Get all contacts
 
 #Credits
 
