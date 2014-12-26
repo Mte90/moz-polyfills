@@ -28,34 +28,37 @@ if (!navigator.mozAlarms) {
 //DeviceStorage support - WIP
 
 if (!navigator.getDeviceStorage) {
-  navigator.getDeviceStorage = function(type) {
-    this.filetype = type;
-    if (this.filetype === "pictures") {
-      this.filetype = "image/*";
+  navigator.getDeviceStorage = function (type) {
+    _filetype = type;
+    if (_filetype === "pictures") {
+      _filetype = "image/*";
     }
-    //Create input element
-    this.input = document.createElement('input');
-    //Set type file for the input
-    this.input.type = 'file';
-    //Multiple support
-    this.input.multiple = 'multiple';
-    //Pass the mime type to the input element
-    this.input.accept = this.filetype;
-    alertConsole('getDeviceStorage ' + this.filetype);
-    this.input.addEventListener('change', function(e) {
-      console.log(e.target.files)
+
+    this.enumerate = function () {
+      //Create input element
+      this.input = document.createElement('input');
+      this.input.files = '';
+      //Set type file for the input
+      this.input.type = 'file';
+      //Multiple support
+      this.input.multiple = 'multiple';
+      //Pass the mime type to the input element
+      this.input.accept = _filetype;
+      alertConsole('getDeviceStorage ' + _filetype);
+      this.input.addEventListener('change', function (e) {
+        this.input.files = {result: e.target.files};
+      }.bind(this), false);
+      //Open the file picker
+      this.input.click();
+
       if (this.onsuccess) {
         this.onsuccess();
       }
-      return {result: e.target.files};
-    }.bind(this), false);
-        
-    this.enumerate = function() {
-      //Open the file picker
-      this.input.click();
-      return false;
+
+      return this.input.files;
+
     };
-    
+
     return this;
 
   };
